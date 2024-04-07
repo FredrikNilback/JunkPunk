@@ -10,21 +10,17 @@ import java.awt.Graphics2D;
 
 public class GamePanel extends JPanel implements Runnable {
     
-    final int tile_size = 32;
-    final int scale = 2;
-    final int true_tile_size = tile_size * scale;
-    final int screen_columns = 28;
-    final int screen_rows = 16;
-    final int screen_width = true_tile_size * screen_columns;
-    final int screen_height = true_tile_size * screen_rows;
+    private final int tile_size = 32;
+    private final int screen_columns = 56;
+    private final int screen_rows = 32;
+    private final int screen_width = tile_size * screen_columns;
+    private final int screen_height = tile_size * screen_rows;
 
     private Player player;
     private int frames_per_second = 60;
 
-    KeyHandler key_handler = new KeyHandler();
-    Thread thread;
-
-    int player_speed;
+    private KeyHandler key_handler = new KeyHandler();
+    private Thread thread;
 
     public GamePanel() {
 
@@ -33,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(key_handler);
         this.setFocusable(true);
 
-        player = new Player(100, 100, true, this, this.key_handler); // change to load from elsewhere later
+        player = new Player(100, 100, "Female", this, this.key_handler); // change to load from elsewhere later
 
     }
 
@@ -66,7 +62,9 @@ public class GamePanel extends JPanel implements Runnable {
                 draw_count++;
             }
             if(timer >= 1000000000) {
-                System.out.println("FPS: " + draw_count);
+                if(!(draw_count == 60)) {
+                    System.out.println("FPS: " + draw_count);
+                }
                 draw_count = 0;
                 timer = 0;
             }
@@ -90,9 +88,13 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     //getters & setters
-
-    public int getTrue_tile_size() {
-        return true_tile_size;
+    public int getTileSize() {
+        return tile_size;
     }
-
+    public int getScreenRows() {
+        return screen_rows;
+    }
+    public int getScreenColumns() {
+        return screen_columns;
+    }
 }

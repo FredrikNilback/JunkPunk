@@ -6,9 +6,6 @@ public class Program {
 
     public Program() {
 
-        //for testing
-        //new TestWindow();
-
         JFrame game_window = new JFrame();
         game_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         game_window.setResizable(false);
