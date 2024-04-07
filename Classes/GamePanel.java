@@ -3,6 +3,7 @@ package Classes;
 import javax.swing.JPanel;
 
 import Classes.Entities.Player;
+import Classes.Tiles.TileManager;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -18,6 +19,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     private Player player;
     private int frames_per_second = 60;
+
+    private TileManager tile_manager = new TileManager(this);
 
     private KeyHandler key_handler = new KeyHandler();
     private Thread thread;
@@ -83,6 +86,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2d = (Graphics2D) g;
 
+        tile_manager.draw(g2d, 1);
         player.draw(g2d);
 
     }

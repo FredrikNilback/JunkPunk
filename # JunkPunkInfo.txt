@@ -1,0 +1,9 @@
+# __JunkPunk__
+
+# Tiles
+0. Air (nothing). path: "/Images/Tiles/NoCollision/Static/air.png"
+1. Standard Grass. path: "/Images/Tiles/Collision/Static/standard_grass.png"
+
+# Map Sizes
+1. 20 x 20
+2.
