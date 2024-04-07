@@ -9,7 +9,7 @@ public class Program {
         JFrame game_window = new JFrame();
         game_window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         game_window.setResizable(false);
-        game_window.setTitle("insert title here");
+        game_window.setTitle("JunkPunk");
 
         GamePanel game_panel = new GamePanel();
         game_window.add(game_panel);

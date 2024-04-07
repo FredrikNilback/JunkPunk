@@ -15,10 +15,12 @@ public class TileManager {
     private Tile[] tile;
     private int map_tile_num[][];
 
+    int map_size_x = 0;
+    int map_size_y = 0;
+
     public TileManager(GamePanel game_panel) {
 
         this.game_panel = game_panel;
-        tile = new Tile[2];
         setTileImage();
     }
 
@@ -26,11 +28,9 @@ public class TileManager {
 
     public void draw(Graphics2D g2d, int map_num) {
 
-        int map_size_x = 0;
-        int map_size_y = 0;
         switch (map_num) {
             case 1:
-                map_size_x = 20;
+                map_size_x = 64;
                 map_size_y = 20;
                 break;
         
@@ -39,13 +39,15 @@ public class TileManager {
         }
         map_tile_num = new int[map_size_x][map_size_y];
 
-        loadMap(map_num, map_size_x, map_size_y);
+        loadMap(map_num);
 
         int column = 0;
         int row = 0;
         while (column < map_size_x && row < map_size_y) {
 
             Image tile_image = tile[map_tile_num[column][row]].getImage();
+
+
             
             g2d.drawImage(tile_image, column * 32, row * 32, 32, 32, null);
             column++;
@@ -57,7 +59,7 @@ public class TileManager {
         }
     }
 
-    private void loadMap(int map_num, int map_size_x, int map_size_y) {
+    private void loadMap(int map_num) {
 
         String path = ("/Maps/map" + map_num + ".txt");
         try {
@@ -67,16 +69,37 @@ public class TileManager {
             int column = 0;
             int row = 0;
 
+            boolean skip = false;
             while(column < map_size_x && row < map_size_y) {
 
                 String line = buffered_reader.readLine();
+                
 
                 while (column < map_size_x) {
 
-                    String string_numbers[] = line.split(" ");
-                    int number = Integer.parseInt(string_numbers[column]);
-
-                    map_tile_num[column][row] = number;
+                    if(skip) {
+                        skip = false;
+                        column++;
+                        continue;
+                    }
+                    String string_numbers[] = line.split("\\s+");
+                    int number;
+                    try {
+                        number = Integer.parseInt(string_numbers[column]);
+                        map_tile_num[column][row] = number;
+                    }
+                    catch (Exception e) {
+                        switch (string_numbers[column]) {
+                            case "TO1":
+                                treeMaker("Oak", "Small", column, row);
+                                skip = true;
+                                break;
+            
+                            default:
+                                break;
+                        }
+                    }
+                    
                     column++;
                 }
 
@@ -91,10 +114,47 @@ public class TileManager {
     }
 
     private void setTileImage() {
+        
         ImageIcon[] tile_icons = new ImageIcon[] {
+
             new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/air.png")),
-            new ImageIcon(getClass().getResource("/Images/Tiles/Collision/Static/standard_grass.png"))
+            
+            new ImageIcon(getClass().getResource("/Images/Tiles/Collision/Static/standard_grass.png")),
+
+            //start of oak tree
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/trunk.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/trunk_base.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/root_left.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/root_right.png")),                  //5
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/branch_left1.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/branch_left2.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/branch_right1.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/branch_right2.png")),          
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left2_top.png")),             //10
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left1_top.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_center_top.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right1_top.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right2_top.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left2_center.png")),          //15
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left1_center_up.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_center_center_up.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right1_center_up.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right2_center.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left2_bottom.png")),          //20
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left1_center_down.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_center_center_down.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right1_center_down.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right2_bottom.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left1_bottom.png")),     //25
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_center_bottom.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right1_bottom.png")),
+            //end of oak tree
+
+            new ImageIcon(getClass().getResource("/Images/Tiles/Collision/Static/dirt_layer1.png")),
+            new ImageIcon(getClass().getResource("/Images/Tiles/Collision/Static/dirt_layer2.png"))
         };
+
+        tile = new Tile[tile_icons.length];
         for (int i = 0; i < tile.length; i++) {
             tile[i] = new Tile();
             tile[i].setImage(toBufferedImage(tile_icons[i].getImage()));
@@ -114,5 +174,55 @@ public class TileManager {
         bGr.dispose();
     
         return bimage;
+    }
+
+    private void treeMaker(String type, String size, int column, int row) {
+
+        switch (size) {
+            case "Small":
+                map_tile_num[column][row] = 3;
+                map_tile_num[column - 1][row] = 4;
+                map_tile_num[column + 1][row] = 5;
+
+                for(int i = 1; i < 7; i++) {
+                    if(row - i >= 0) {
+                        map_tile_num[column][row - i] = 2;
+                        if(i == 4) {
+                            map_tile_num[column - 1][row - i] = 6;
+                            map_tile_num[column - 2][row - i] = 7;
+                        }
+                        else if(i == 5) {
+                            map_tile_num[column + 1][row - i] = 8;
+                            map_tile_num[column + 2][row - i] = 9;
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+
+                if(row - 10 >= 0) {
+                    int crown_int = 10; 
+                    if(column - 2 >= 0 && column + 2 <= map_size_x) {
+                        for (int r = 10; r > 6; r--) {
+                            for (int c = 2; c > -3; c--) {
+                                if(r == 7 && (c == 2 || c == -2)) {
+                                    continue;
+                                }
+                                map_tile_num[column - c][row - r] = crown_int;
+                                crown_int++;
+                            }
+                        }
+                    }
+                    
+                }
+
+
+                
+        
+            default:
+                break;
+        }
+        
     }
 }

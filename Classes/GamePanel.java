@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import Classes.Entities.Player;
 import Classes.Tiles.TileManager;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -28,6 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
     public GamePanel() {
 
         this.setPreferredSize(new Dimension(screen_width, screen_height));
+        this.setBackground(new Color(173, 216, 230));
         this.setDoubleBuffered(true);
         this.addKeyListener(key_handler);
         this.setFocusable(true);
