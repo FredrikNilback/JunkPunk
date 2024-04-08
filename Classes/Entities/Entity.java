@@ -2,12 +2,14 @@ package Classes.Entities;
 
 import java.awt.image.BufferedImage;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.Graphics2D;
 
 public class Entity {
-    
+
     protected int pos_x;
     protected int pos_y;
+    protected int screen_x;
     protected int speed;
 
     private BufferedImage base_model, facing1, facing2, left1, left2, left3, left4, left5, left6, right1, right2, right3, right4, right5, right6;
@@ -19,6 +21,9 @@ public class Entity {
     private int sprite_counter = 0;
     private int sprite_num = 1;
     private int run_duration = 64;
+
+    protected Rectangle hit_box;
+    protected boolean collision_on = false;
 
 
     protected BufferedImage toBufferedImage(Image img) {

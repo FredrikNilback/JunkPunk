@@ -1,14 +1,14 @@
 # __JunkPunk__
 
-id
+id           
 |
 V
 
 # Tiles
-0. Air (nothing).   path: "/Images/Tiles/NoCollision/Static/air.png"
-1. Standard Grass.  path: "/Images/Tiles/Collision/Static/standard_grass.png"
-28. Dirt Layer 1.  path: "/Images/Tiles/Collision/Static/dirt_layer1.png"
-29. Dirt Layer 2.   path: "/Images/Tiles/Collision/Static/dirt_layer2.png"
+0. Air (nothing).       path: "/Images/Tiles/NoCollision/Static/air.png"
+1. Standard Grass.      path: "/Images/Tiles/Collision/Static/standard_grass.png"
+28. Dirt Layer 1.       path: "/Images/Tiles/Collision/Static/dirt_layer1.png"
+29. Dirt Layer 2.       path: "/Images/Tiles/Collision/Static/dirt_layer2.png"
     > Tree 
         > Oak
             2.  Trunk.                      path: "/Images/Tiles/NoCollision/Static/Tree/Oak/trunk.png"

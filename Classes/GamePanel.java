@@ -18,15 +18,19 @@ public class GamePanel extends JPanel implements Runnable {
     private final int screen_width = tile_size * screen_columns;
     private final int screen_height = tile_size * screen_rows;
 
+    private final int world_columns;
+    private final int world_rows;
+
     private Player player;
     private int frames_per_second = 60;
 
-    private TileManager tile_manager = new TileManager(this);
+    private TileManager tile_manager = new TileManager(this, 1);
 
     private KeyHandler key_handler = new KeyHandler();
     private Thread thread;
+    private int map_num;
 
-    public GamePanel() {
+    public GamePanel(int map_num) {
 
         this.setPreferredSize(new Dimension(screen_width, screen_height));
         this.setBackground(new Color(173, 216, 230));
@@ -34,7 +38,24 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(key_handler);
         this.setFocusable(true);
 
-        player = new Player(100, 100, "Female", this, this.key_handler); // change to load from elsewhere later
+        this.map_num = map_num;
+        int[] player_start = new int[2];
+
+        switch (map_num) {
+            case 1:
+                world_columns = 64;
+                world_rows = 20;
+                player_start[0] = (8 - 1) * tile_size;  //change 8 to tile int later
+                player_start[1] = (18 - 3) * tile_size;  //change 18 to tile int later
+                break;
+        
+            default:
+                world_columns = 20;
+                world_rows = 20;
+                break;
+        }
+
+        player = new Player(player_start[0], player_start[1], "Female", this, this.key_handler); // change to load from elsewhere later
 
     }
 
@@ -88,7 +109,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        tile_manager.draw(g2d, 1);
+        tile_manager.draw(g2d);
         player.draw(g2d);
 
     }
@@ -102,5 +123,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
     public int getScreenColumns() {
         return screen_columns;
+    }
+    public int getScreenWidth() {
+        return screen_width;
+    }
+    public int getScreenHeight() {
+        return screen_height;
+    }
+    public Player getPlayer() {
+        return player;
     }
 }

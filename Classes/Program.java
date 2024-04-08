@@ -11,7 +11,7 @@ public class Program {
         game_window.setResizable(false);
         game_window.setTitle("JunkPunk");
 
-        GamePanel game_panel = new GamePanel();
+        GamePanel game_panel = new GamePanel(1);
         game_window.add(game_panel);
         game_window.pack();
 

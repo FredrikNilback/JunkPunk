@@ -21,4 +21,7 @@ public class Tile {
     public boolean getCollision() {
         return collision;
     }
+    public void setCollisionTrue() {
+        this.collision = true;
+    }
 }

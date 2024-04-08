@@ -2,6 +2,8 @@ package Classes.Entities;
 
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+
 import javax.swing.ImageIcon;
 
 import Classes.GamePanel;
@@ -9,6 +11,9 @@ import Classes.KeyHandler;
 
 
 public class Player extends Entity {
+
+    private final int screen_x;
+    private final int screen_y;
 
     private int player_width = 64;
     private int player_heigt = 128;
@@ -18,6 +23,9 @@ public class Player extends Entity {
 
     public Player(int player_x_start, int player_y_start, String gender, GamePanel game_panel, KeyHandler key_handler) {
 
+        screen_x = (game_panel.getScreenWidth() / 2) - (game_panel.getTileSize() / 2);
+        screen_y = (game_panel.getScreenHeight() / 2) - (game_panel.getTileSize() + 1);
+
         speed = 5;
         pos_x = player_x_start;
         pos_y = player_y_start;
@@ -26,6 +34,8 @@ public class Player extends Entity {
         this.game_panel = game_panel;
         this.key_handler = key_handler;
         setDirection("facing");
+
+        hit_box = new Rectangle(8,8, 24, 56);
     }
 
 
@@ -115,7 +125,7 @@ public class Player extends Entity {
                 break;
         }
 
-        g2d.drawImage(image, pos_x, pos_y, player_width, player_heigt, null);
+        g2d.drawImage(image, screen_x, screen_y, player_width, player_heigt, null);
     }
 
     
@@ -189,12 +199,19 @@ public class Player extends Entity {
     public void setPosX(int player_x) {
         this.pos_x = player_x;
     }
-
-    public int getPlayerY() {
+    public int getPosY() {
         return pos_y;
     }
-    public void setPlayerY(int player_y) {
+    public void setPosY(int player_y) {
         this.pos_y = player_y;
     }
+
+    public int getScreenX() {
+        return screen_x;
+    }
+    public int getScreenY() {
+        return screen_y;
+    }
+    
 
 }

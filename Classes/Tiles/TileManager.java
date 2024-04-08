@@ -1,6 +1,5 @@
 package Classes.Tiles;
 
-import Classes.GamePanel;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -9,6 +8,9 @@ import java.io.InputStreamReader;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import java.util.Arrays;
+
+import Classes.GamePanel;
+import Classes.Entities.Player;
 
 public class TileManager {
     
@@ -20,45 +22,75 @@ public class TileManager {
     int map_size_x = 0;
     int map_size_y = 0;
 
-    public TileManager(GamePanel game_panel) {
+    public TileManager(GamePanel game_panel, int map_num) {
 
         this.game_panel = game_panel;
         setTileImage();
-    }
-
-
-
-    public void draw(Graphics2D g2d, int map_num) {
-
         switch (map_num) {
             case 1:
                 map_size_x = 64;
                 map_size_y = 20;
+                
                 break;
         
             default:
                 break;
         }
+
         map_tile_num = new int[map_size_x][map_size_y];
         map_tile_num_layer2 = new int[map_size_x][map_size_y];
         for (int i = 0; i < map_size_x; i++) {
             Arrays.fill(map_tile_num_layer2[i], 0);
         }
-
         loadMap(map_num);
+        
+    }
+
+
+
+    public void draw(Graphics2D g2d) {
 
         int column = 0;
         int row = 0;
         while (column < map_size_x && row < map_size_y) {
 
             if(map_tile_num[column][row] != 0) {
-                Image tile_image = tile[map_tile_num[column][row]].getImage();
-                g2d.drawImage(tile_image, column * 32, row * 32, 32, 32, null);
+
+                Player player = game_panel.getPlayer();
+
+                int world_x = column * 32;
+                int world_y = row * 32;
+                int screen_x = world_x - player.getPosX() + player.getScreenX();
+                int screen_y = world_y - player.getPosY() + player.getScreenY();
+
+                if(world_x + 32 > player.getPosX() - player.getScreenX() && 
+                   world_x - 32 < player.getPosX() + player.getScreenX() &&
+                   world_y + 32 > player.getPosY() - player.getScreenY() &&  
+                   world_y - 32 < player.getPosX() + player.getScreenY()) {
+
+                        Image tile_image = tile[map_tile_num[column][row]].getImage();
+                        g2d.drawImage(tile_image, screen_x, screen_y, 32, 32, null);
+                    }
+                
             }
             
             if(map_tile_num_layer2[column][row] != 0) {
-                Image tile_image = tile[map_tile_num_layer2[column][row]].getImage();
-                g2d.drawImage(tile_image, column * 32, row * 32, 32, 32, null);
+
+                Player player = game_panel.getPlayer();
+
+                int world_x = column * 32;
+                int world_y = row * 32;
+                int screen_x = world_x - player.getPosX() + player.getScreenX();
+                int screen_y = world_y - player.getPosY() + player.getScreenY();
+
+                if(world_x + 32 > player.getPosX() - player.getScreenX() && 
+                   world_x - 32< player.getPosX() + player.getScreenX() &&
+                   world_y + 32> player.getPosY() - player.getScreenY() && 
+                   world_y - 32< player.getPosX() + player.getScreenY()) {
+
+                        Image tile_image = tile[map_tile_num_layer2[column][row]].getImage();
+                        g2d.drawImage(tile_image, screen_x, screen_y, 32, 32, null);
+                    }
             }
             column++;
 
@@ -116,6 +148,10 @@ public class TileManager {
 
     private void setTileImage() {
         
+        int[] tiles_with_collision_index = new int[] {
+            1, 28, 29
+        };
+
         ImageIcon[] tile_icons = new ImageIcon[] {
 
             new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/air.png")),
@@ -159,6 +195,10 @@ public class TileManager {
         for (int i = 0; i < tile.length; i++) {
             tile[i] = new Tile();
             tile[i].setImage(toBufferedImage(tile_icons[i].getImage()));
+        }
+
+        for (int collision_int : tiles_with_collision_index) {
+            tile[collision_int].setCollisionTrue();
         }
         
     }   
@@ -210,7 +250,14 @@ public class TileManager {
                                 if(r == 7 && (c == 2 || c == -2)) {
                                     continue;
                                 }
-                                map_tile_num[column - c][row - r] = crown_int;
+                                if(crown_int <= 15 || (crown_int > 18 && crown_int <= 20) ||
+                                   (crown_int > 23 && crown_int <= 25) || crown_int == 27) {
+                                    map_tile_num_layer2[column - c][row - r] = crown_int;
+                                }
+                                else {
+                                    map_tile_num[column - c][row - r] = crown_int;
+                                }
+                                
                                 crown_int++;
                             }
                         }
