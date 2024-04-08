@@ -5,9 +5,10 @@ import java.awt.Image;
 import java.awt.Graphics2D;
 
 public class Entity {
-    private int pos_x;
-    private int pos_y;
-    private int speed;
+    
+    protected int pos_x;
+    protected int pos_y;
+    protected int speed;
 
     private BufferedImage base_model, facing1, facing2, left1, left2, left3, left4, left5, left6, right1, right2, right3, right4, right5, right6;
     private BufferedImage[] facing = new BufferedImage[] {facing1, facing2};
@@ -119,4 +120,5 @@ public class Entity {
     public void mmRunDuration() {
         run_duration--;
     }
+
 }

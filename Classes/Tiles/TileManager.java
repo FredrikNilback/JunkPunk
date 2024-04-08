@@ -8,12 +8,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import java.util.Arrays;
 
 public class TileManager {
     
     private GamePanel game_panel;
     private Tile[] tile;
     private int map_tile_num[][];
+    private int map_tile_num_layer2[][];
 
     int map_size_x = 0;
     int map_size_y = 0;
@@ -38,6 +40,10 @@ public class TileManager {
                 break;
         }
         map_tile_num = new int[map_size_x][map_size_y];
+        map_tile_num_layer2 = new int[map_size_x][map_size_y];
+        for (int i = 0; i < map_size_x; i++) {
+            Arrays.fill(map_tile_num_layer2[i], 0);
+        }
 
         loadMap(map_num);
 
@@ -45,11 +51,15 @@ public class TileManager {
         int row = 0;
         while (column < map_size_x && row < map_size_y) {
 
-            Image tile_image = tile[map_tile_num[column][row]].getImage();
-
-
+            if(map_tile_num[column][row] != 0) {
+                Image tile_image = tile[map_tile_num[column][row]].getImage();
+                g2d.drawImage(tile_image, column * 32, row * 32, 32, 32, null);
+            }
             
-            g2d.drawImage(tile_image, column * 32, row * 32, 32, 32, null);
+            if(map_tile_num_layer2[column][row] != 0) {
+                Image tile_image = tile[map_tile_num_layer2[column][row]].getImage();
+                g2d.drawImage(tile_image, column * 32, row * 32, 32, 32, null);
+            }
             column++;
 
             if(column == map_size_x) {
@@ -69,19 +79,11 @@ public class TileManager {
             int column = 0;
             int row = 0;
 
-            boolean skip = false;
             while(column < map_size_x && row < map_size_y) {
 
                 String line = buffered_reader.readLine();
-                
-
                 while (column < map_size_x) {
 
-                    if(skip) {
-                        skip = false;
-                        column++;
-                        continue;
-                    }
                     String string_numbers[] = line.split("\\s+");
                     int number;
                     try {
@@ -92,7 +94,6 @@ public class TileManager {
                         switch (string_numbers[column]) {
                             case "TO1":
                                 treeMaker("Oak", "Small", column, row);
-                                skip = true;
                                 break;
             
                             default:
@@ -145,7 +146,7 @@ public class TileManager {
             new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_center_center_down.png")),
             new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right1_center_down.png")),
             new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right2_bottom.png")),
-            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left1_bottom.png")),     //25
+            new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_left1_bottom.png")),          //25
             new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_center_bottom.png")),
             new ImageIcon(getClass().getResource("/Images/Tiles/NoCollision/Static/Tree/Oak/crown_right1_bottom.png")),
             //end of oak tree
@@ -181,19 +182,19 @@ public class TileManager {
         switch (size) {
             case "Small":
                 map_tile_num[column][row] = 3;
-                map_tile_num[column - 1][row] = 4;
-                map_tile_num[column + 1][row] = 5;
+                map_tile_num_layer2[column - 1][row] = 4;
+                map_tile_num_layer2[column + 1][row] = 5;
 
                 for(int i = 1; i < 7; i++) {
                     if(row - i >= 0) {
                         map_tile_num[column][row - i] = 2;
                         if(i == 4) {
-                            map_tile_num[column - 1][row - i] = 6;
-                            map_tile_num[column - 2][row - i] = 7;
+                            map_tile_num_layer2[column - 1][row - i] = 6;
+                            map_tile_num_layer2[column - 2][row - i] = 7;
                         }
                         else if(i == 5) {
-                            map_tile_num[column + 1][row - i] = 8;
-                            map_tile_num[column + 2][row - i] = 9;
+                            map_tile_num_layer2[column + 1][row - i] = 8;
+                            map_tile_num_layer2[column + 2][row - i] = 9;
                         }
                     }
                     else {
@@ -215,10 +216,7 @@ public class TileManager {
                         }
                     }
                     
-                }
-
-
-                
+                } 
         
             default:
                 break;

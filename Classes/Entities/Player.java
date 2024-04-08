@@ -1,6 +1,5 @@
 package Classes.Entities;
 
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import javax.swing.ImageIcon;
@@ -10,22 +9,18 @@ import Classes.KeyHandler;
 
 
 public class Player extends Entity {
-    private int player_x;
-    private int player_y;
 
     private int player_width = 64;
     private int player_heigt = 128;
-
-    private int player_speed = 5;
-
-    private Image player_image;
 
     private GamePanel game_panel;
     private KeyHandler key_handler;
 
     public Player(int player_x_start, int player_y_start, String gender, GamePanel game_panel, KeyHandler key_handler) {
-        player_x = player_x_start;
-        player_y = player_y_start;
+
+        speed = 5;
+        pos_x = player_x_start;
+        pos_y = player_y_start;
         getPlayerImage(gender);
 
         this.game_panel = game_panel;
@@ -40,7 +35,7 @@ public class Player extends Entity {
             if(key_handler.left == true) {
 
                 setDirection("left");
-                setPlayerX(player_x - player_speed);
+                pos_x -= speed;
                 if(getRunDuration() > 12) {
                     mmRunDuration();
                 }
@@ -49,7 +44,7 @@ public class Player extends Entity {
             if(key_handler.right == true) {
 
                 setDirection("right");
-                setPlayerX(player_x + player_speed);
+                pos_x += speed;
                 if(getRunDuration() > 12) {
                     mmRunDuration();
                 }
@@ -120,7 +115,7 @@ public class Player extends Entity {
                 break;
         }
 
-        g2d.drawImage(image, player_x, player_y, player_width, player_heigt, null);
+        g2d.drawImage(image, pos_x, pos_y, player_width, player_heigt, null);
     }
 
     
@@ -188,22 +183,18 @@ public class Player extends Entity {
         }
     }
 
-    public int getPlayerX() {
-        return player_x;
+    public int getPosX() {
+        return pos_x;
     }
-    public void setPlayerX(int player_x) {
-        this.player_x = player_x;
+    public void setPosX(int player_x) {
+        this.pos_x = player_x;
     }
 
     public int getPlayerY() {
-        return player_y;
+        return pos_y;
     }
     public void setPlayerY(int player_y) {
-        this.player_y = player_y;
-    }
-
-    public int getPlayerSpeed() {
-        return player_speed;
+        this.pos_y = player_y;
     }
 
 }
